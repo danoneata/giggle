@@ -11,10 +11,7 @@ Collaborative filtering project.
 
 ## Resources
 
-Below there are some resources that discuss collaborative filtering:
-the courses have assignments on the topic,
-while the books present a more theoretical discussion.
-I've studied these resources to get some inspiration.
+Below there are some resources that discuss collaborative filtering: the courses have assignments on the topic, while the books present a more theoretical discussion. I've studied these resources to get some inspiration.
 
 - Coursera Stanford: [Machine Learning](http://www.holehouse.org/mlclass/)
 - Harvard: [CS109 Data Science](http://cs109.github.io/2015/)
