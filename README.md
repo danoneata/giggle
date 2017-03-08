@@ -6,14 +6,18 @@ Collaborative filtering project.
 
 ## TODO
 
-- [ ]
-- [ ]
+- [ ] Use type annotations
+- [ ] Add tests
 
 ## Ideas
 
 From [CS281, Assignment 3](http://www.seas.harvard.edu/courses/cs281/files/assignment-3.pdf):
 
 > We might imagine that some jokes are just better or worse than others. We might also imagine that some users tend to have higher or lower means in their ratings. Introduce such biases into the model and fit it again, learning these new biases as well. Explain how you did this. One side-effect is that you should be able to rank the jokes from best to worst. What are the best and worst jokes?
+
+From Programming Collective Intelligence, chapter 2, exercise 5:
+
+> Audioscrobbler. Take a look at http://www.audioscrobbler.net, a dataset contain- ing music preferences for a large set of users. Use their web services API to get a set of data for making and building a music recommendation system.
 
 ## Resources
 
@@ -60,14 +64,23 @@ Below there are some resources that discuss collaborative filtering: the courses
 - There are two assignments; both of them use a cleaned up version of the Jester dataset.
 - **NICE** The [first assignment](http://www.seas.harvard.edu/courses/cs281/files/assignment-1.pdf) presents a more exploratory task: modeling the ratings using various distributions without knowledge of the users or movies.
 - The [second assignment](http://www.seas.harvard.edu/courses/cs281/files/assignment-3.pdf) has three problems:
-1. Clustering Jokes and Ratings with Expectation Maximization
-2. GLM Regression of Ratings with Text Features
-3. Modeling Users and Jokes with a Latent Linear Model
+  1. Clustering Jokes and Ratings with Expectation Maximization
+  2. GLM Regression of Ratings with Text Features
+  3. Modeling Users and Jokes with a Latent Linear Model
 - They are all very interesting, but they also seem quite hard: not sure if I have enough time to go through them; definitely try them later.
 
 ### Toby Segaran: Programming Collective Intelligence
 
 - **NICE** Chapter 2 is an introduction on collaborative filtering with lots of coding examples and applications (movie and link recommendations)
+- Presents straightforward ways of computing the item-item and user-user similarities based on Euclidean distance or Pearson correlation
+- Two methods for predicting the rating `r[i, j]` of user `i` for item `j`:
+
+```
+r_user_1[i, j] = sum(user_sim[i, :] * r[:, j]) / sum(user_sim[i, :])
+r_item_2[i, j] = sum(item_sim[:, j] * r[i, :]) / sum(item_sim[:, j])
+```
+
+- The item-based prediction is usually more practical: item-item similarities change less frequently than user-user similarities, hence we can cache them and only recompute them at low-traffic times.
 
 ### David Barber: Bayesian Reasoning and Machine Learning
 
