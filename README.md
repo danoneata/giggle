@@ -1,12 +1,56 @@
-Collaborative filtering project.
+A recommender system for jokes based on the Jester dataset.
 
-## Setup
+# Setup
 
-## Usage
+Run the following commands to create a virtual environment, install the requirements and generate a command line interface, `giggle`:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python setup.py install
+```
+
+# Usage
+
+The command line interface, `giggle`, exposes three sub-commands (see the [next section](#details-and-examples) for more details and examples):
+
+* `train`: Trains a predictive model
+* `evaluate`: Creates a report with the performance of the current model
+* `web`: Starts an web service that can be used for prediction
+
+You can get more information about what arguments each sub-command accepts by running the help command:
+
+```bash
+giggle --help
+giggle predict --help
+```
+
+## Details and examples
+
+# Development
+
+In order to keep code-base standardized, I have tried:
+
+* to keep the code [PEP8](ihttps://www.python.org/dev/peps/pep-0008/) compliant.
+* to add [type annotations](https://docs.python.org/3/library/typing.html) and make sure `mypy` accepts it:
+
+```bash
+mypy --fast-parser --incremental -m giggle
+```
 
 ## TODO
 
-- [ ] Use type annotations
+- [x] Build high-level API
+- [ ] Decide upon a dataset
+- [ ] Exploratory data analysis
+- [ ] Prepare the experimental setup: create folds, write metric
+- [ ] Implement and evaluate some baselines
+- [ ] Implement and evaluate an item-based prediction method
+- [ ] Implement and evaluate a matrix factorization method
+- [ ] Extra: Predict ratings from items' features
+
+- [ ] Add type annotations
 - [ ] Add tests
 
 ## Ideas
