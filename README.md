@@ -41,6 +41,10 @@ Run the script to populate the database:
 SECRET_KEY=xxx python -m giggle.models --todo init
 ```
 
+```bash
+python scripts/create_folds.py
+```
+
 # Usage
 
 The command line interface, `giggle`, exposes three sub-commands (see the [next section](#details-and-examples) for more details and examples):
@@ -74,8 +78,8 @@ mypy --fast-parser --incremental -m giggle
 - [x] Build high-level API
 - [x] Decide upon a dataset
 - [x] Get dataset into a database
+- [x] Prepare the experimental setup: create folds, write metric
 - [ ] Exploratory data analysis
-- [ ] Prepare the experimental setup: create folds, write metric
 - [ ] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Implement and evaluate a matrix factorization method
