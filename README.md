@@ -79,12 +79,13 @@ mypy --fast-parser --incremental -m giggle
 - [x] Decide upon a dataset
 - [x] Get dataset into a database
 - [x] Prepare the experimental setup: create folds, write metric
-- [ ] Exploratory data analysis
+- [x] Exploratory data analysis
+- [ ] Create a subset of the data
 - [ ] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Implement and evaluate a matrix factorization method
 - [ ] Extra: Predict ratings from items' features
-
+- [ ] Check code to be PEP8-compliant
 - [ ] Add type annotations
 - [ ] Add tests
 
