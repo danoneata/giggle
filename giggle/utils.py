@@ -1,4 +1,5 @@
 import functools
+import itertools
 import json
 import traceback
 
@@ -19,3 +20,8 @@ def _error_as_json(ex, logger=None, status=500):
         logger.error(" -- %r" % ex)
         logger.error(traceback.format_exc())
     return json.dumps({'error': "{}".format(ex)}), status
+
+
+def grouper(iterable, n, fillvalue=None):
+    args = [iter(iterable)] * n
+    return itertools.zip_longest(*args, fillvalue=fillvalue)

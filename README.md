@@ -11,6 +11,36 @@ pip install -r requirements.txt
 python setup.py install
 ```
 
+## Populate database
+
+Download the data:
+
+```bash
+mkdir -p data/jester && cd data/jester
+for f in jester_ratings jester_items; do
+    wget http://www.seas.harvard.edu/courses/cs281/data/${f}.tar.gz
+    tar xvzf ${f}.tar.gz
+done
+cd -
+```
+
+Create the database:
+
+```bash
+# Create a new user
+sudo -u postgres createuser -s jester
+# Create a new database
+createdb -U jester jester_db
+# Set the URL to the database as a system variable
+export DATABASE_URL="postgresql://jester@localhost/jester_db"
+```
+
+Run the script to populate the database:
+
+```bash
+SECRET_KEY=xxx python -m giggle.models --todo init
+```
+
 # Usage
 
 The command line interface, `giggle`, exposes three sub-commands (see the [next section](#details-and-examples) for more details and examples):
@@ -42,7 +72,8 @@ mypy --fast-parser --incremental -m giggle
 ## TODO
 
 - [x] Build high-level API
-- [ ] Decide upon a dataset
+- [x] Decide upon a dataset
+- [x] Get dataset into a database
 - [ ] Exploratory data analysis
 - [ ] Prepare the experimental setup: create folds, write metric
 - [ ] Implement and evaluate some baselines
