@@ -86,6 +86,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Get dataset into a database
 - [x] Prepare the experimental setup: create folds, write metric
 - [x] Exploratory data analysis
+- [ ] Implement "addData" REST point
 - [ ] Create a subset of the data
 - [ ] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
@@ -94,6 +95,8 @@ mypy --fast-parser --incremental -m giggle
 - [ ] Check code to be PEP8-compliant
 - [ ] Add type annotations
 - [ ] Add tests
+- [ ] Regenerate database with not-nullable constraint
+- [ ] Clean up `README.md`: split in `TODO.md` and `IDEAS.md`
 
 ## Ideas
 
