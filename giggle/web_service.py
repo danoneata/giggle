@@ -2,6 +2,8 @@ import logging
 import pdb
 import os
 
+from itertools import repeat
+
 from flask import (  # type: ignore
     Flask,
     abort,
@@ -41,14 +43,17 @@ logger = logging.getLogger('web-service')
 wrap_exceptions_logger = partial(wrap_exceptions, logger=logger)
 
 
-recommender = load_recommender(os.getenv('RECO'))
+recommender = load_recommender(os.getenv('RECOMMENDER'))
 
 
 @app.route('/predictInterests/<user_id>')
 @wrap_exceptions_logger
 def predict_interests(user_id):
-    predictions = recommender.predict(user_id)
-    predictions = predictions[:5]
+    jokes = range(1, 141)
+    user_joke_ids = list(zip(repeat(user_id), jokes))
+    predictions = zip(recommender.predict_multi(user_joke_ids), jokes)
+    predictions = sorted(predictions, reverse=True)
+    predictions = [j for _, j in predictions[:5]]
     json_data = dumps(predictions, indent=4)
     logger.info(json_data)
     return json_data, 200

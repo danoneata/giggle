@@ -11,12 +11,30 @@ from pandas import (  # type: ignore
 
 from sqlalchemy.engine import create_engine  # type: ignore
 
+from typing import (
+    Callable,
+    List,
+    Tuple,
+)
+
+
+FOLDS = range(1, 11)
+
 
 def load_data():
     url = os.getenv('DATABASE_URL')
     con = create_engine(url)
     # return next(read_sql_table('ratings', con, chunksize=5000))
     return read_sql_table('ratings', con)
+
+
+def load_split_fold(split: str, i: int) -> List[int]:
+    with open('data/folds/{}_{:02d}.txt'.format(split, i), 'r') as f:
+        return list(map(int, f.readlines()))
+
+
+def load_fold(i: int) -> Tuple[List[int], List[int]]:
+    return load_split_fold('train', i), load_split_fold('test', i)
 
 
 def iqr(xs):

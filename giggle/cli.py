@@ -14,6 +14,11 @@ from .data import (
     load_data,
 )
 
+from .evaluate import (
+    evaluate_folds,
+    print_results,
+)
+
 from .recommender import (
     RECOMMENDERS,
     save_recommender,
@@ -30,6 +35,10 @@ def train(args):
 
 def evaluate(args):
     # Evaluates recommender system
+    data = load_data()
+    recommender = RECOMMENDERS[args.recommender]()
+    results = evaluate_folds(data, recommender, args.verbose)
+    print_results(results)
 
 
 def web(args):

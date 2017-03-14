@@ -87,8 +87,8 @@ mypy --fast-parser --incremental -m giggle
 - [x] Prepare the experimental setup: create folds, write metric
 - [x] Exploratory data analysis
 - [x] Implement "addData" REST point
-- [ ] Create a subset of the data
-- [ ] Implement and evaluate some baselines
+- [x] Create a subset of the data
+- [x] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Implement and evaluate a matrix factorization method
 - [ ] Extra: Predict ratings from items' features

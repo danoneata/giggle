@@ -10,16 +10,11 @@ from scipy.stats import (  # type: ignore
     norm,
 )
 
-from sklearn.metrics import mean_squared_error  # type: ignore
-
 from typing import (
     Any,
     List,
+    Tuple,
 )
-
-
-def rmse(y_true, y_pred):
-    return np.sqrt(mean_squared_error(y_true, y_pred))
 
 
 class Recommender:
@@ -27,11 +22,14 @@ class Recommender:
     def fit(self, data: DataFrame):
         pass
 
-    def predict_one(self, data: DataFrame, user_id: int, joke_id: int) -> float:
+    def predict(self, user_id: int, joke_id: int) -> float:
         pass
 
-    def predict_multi_jokes(self, data: DataFrame, user_id: int, joke_ids: List[int]) -> List[float]:
-        pass
+    def predict_multi(self, user_joke_ids: List[Tuple[int, int]]) -> List[float]:
+        return [
+            self.predict(user_id, joke_id)
+            for user_id, joke_id in user_joke_ids
+        ]
 
 
 class GaussianRecommender(Recommender):
@@ -44,14 +42,23 @@ class GaussianRecommender(Recommender):
         self.sigma = data.rating.std()
         return self
 
-    def predict_rating(self, *args, **kwargs) -> float:
-        return norm.rvs(
+    def predict(self, user_id: int, joke_id: int) -> float:
+        value, = norm.rvs(
             loc=self.mu,
             scale=self.sigma,
             size=1,
             random_state=self.random_state,
         )
+        return value
 
+    def predict_multi(self, user_joke_ids: List[Tuple[int, int]]) -> List[float]:
+        size = len(user_joke_ids)
+        return norm.rvs(
+            loc=self.mu,
+            scale=self.sigma,
+            size=size,
+            random_state=self.random_state,
+        )
 
 class BetaRecommender(Recommender):
     pass
@@ -66,11 +73,11 @@ RECOMMENDERS = {
 PATH = 'data/models/{}.pkl'
 
 
-def save_recommender(key, recommender):
+def save_recommender(key: str, recommender: Recommender):
     with open(PATH.format(key), 'wb') as f:
         pickle.dump(recommender, f)
 
 
-def load_recommender(key):
+def load_recommender(key: str) -> Recommender:
     with open(PATH.format(key), 'rb') as f:
         return pickle.load(f)
