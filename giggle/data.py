@@ -1,15 +1,15 @@
 import os
 import pdb
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore
 
-import numpy as np
+import numpy as np  # type: ignore
 
-from pandas import (
+from pandas import (  # type: ignore
     read_sql_table,
 )
 
-from sqlalchemy.engine import create_engine
+from sqlalchemy.engine import create_engine  # type: ignore
 
 
 def load_data():

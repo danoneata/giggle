@@ -1,17 +1,17 @@
 import argparse
 import pdb
 
-from flask import Flask
+from flask import Flask  # type: ignore
 
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy  # type: ignore
 
 from functools import partial
 
-import names
+import names  # type: ignore
 
-import numpy as np
+import numpy as np  # type: ignore
 
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates  # type: ignore
 
 from .config import Config
 
@@ -21,7 +21,7 @@ from .utils import grouper
 db = SQLAlchemy()
 
 
-class User(db.Model):
+class User(db.Model):  # type: ignore
 
     __tablename__ = 'users'
 
@@ -32,7 +32,7 @@ class User(db.Model):
         return '<User {:d}: {:s}>'.format(self.id, self.name)
 
 
-class Joke(db.Model):
+class Joke(db.Model):  # type: ignore
 
     __tablename__ = 'jokes'
 
@@ -42,7 +42,7 @@ class Joke(db.Model):
         return '<Joke {:d}>'.format(self.id)
 
 
-class Rating(db.Model):
+class Rating(db.Model):  # type: ignore
 
     __tablename__ = 'ratings'
 

@@ -8,7 +8,7 @@ from flask import (  # type: ignore
     request,
 )
 
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy  # type: ignore
 
 from functools import partial
 
