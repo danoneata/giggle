@@ -23,7 +23,7 @@ def evaluate(args):
 def web(args):
     # Starts web-server
     from .web_service import app
-    app.run('0.0.0.0', port=args.port)
+    app.run('0.0.0.0', port=args.port, debug=False)
 
 
 TODO = {
