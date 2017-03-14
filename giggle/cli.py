@@ -10,17 +10,26 @@ from typing import (
     Callable,
 )
 
+from .data import (
+    load_data,
+)
+
 from .recommender import (
     RECOMMENDERS,
+    save_recommender,
 )
+
 
 def train(args):
     # Trains recommender system
-    pass
+    data = load_data()
+    recommender = RECOMMENDERS[args.recommender]()
+    recommender.fit(data)
+    save_recommender(args.recommender, recommender)
+
 
 def evaluate(args):
     # Evaluates recommender system
-    pass
 
 
 def web(args):
@@ -53,8 +62,14 @@ def main():
     )
     parser_1.add_argument(
         '-d', '--dataset',
-        required=True,
+        # required=True,
         help='which dataset to use.',
+    )
+    parser_1.add_argument(
+        '-r', '--recommender',
+        required=True,
+        choices=RECOMMENDERS,
+        help='which recommender type to use.',
     )
     parser_1.add_argument(
         '-v', '--verbose',
@@ -70,8 +85,14 @@ def main():
     )
     parser_2.add_argument(
         '-d', '--dataset',
-        required=True,
+        # required=True,
         help='which dataset to use.',
+    )
+    parser_2.add_argument(
+        '-r', '--recommender',
+        required=True,
+        choices=RECOMMENDERS,
+        help='which recommender type to use.',
     )
     parser_2.add_argument(
         '--plot',

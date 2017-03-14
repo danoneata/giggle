@@ -40,8 +40,8 @@ class GaussianRecommender(Recommender):
         self.random_state = 1337
 
     def fit(self, data: DataFrame):
-        self.mu = data.ratings.mean()
-        self.sigma = data.ratings.std()
+        self.mu = data.rating.mean()
+        self.sigma = data.rating.std()
         return self
 
     def predict_rating(self, *args, **kwargs) -> float:

@@ -1,5 +1,6 @@
 import logging
 import pdb
+import os
 
 from flask import (  # type: ignore
     Flask,
@@ -40,7 +41,7 @@ logger = logging.getLogger('web-service')
 wrap_exceptions_logger = partial(wrap_exceptions, logger=logger)
 
 
-recommender = load_model()
+recommender = load_recommender(os.getenv('RECO'))
 
 
 @app.route('/predictInterests/<user_id>')
