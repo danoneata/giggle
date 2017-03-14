@@ -18,8 +18,8 @@ from json import dumps
 
 from .config import Config
 
-from .learn import (
-    load_model,
+from .recommender import (
+    load_recommender,
 )
 
 from .models import (

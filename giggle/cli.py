@@ -10,6 +10,9 @@ from typing import (
     Callable,
 )
 
+from .recommender import (
+    RECOMMENDERS,
+)
 
 def train(args):
     # Trains recommender system
