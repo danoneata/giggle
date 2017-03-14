@@ -11,6 +11,8 @@ import names
 
 import numpy as np
 
+from sqlalchemy.orm import validates
+
 from .config import Config
 
 from .utils import grouper
@@ -46,13 +48,13 @@ class Rating(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User')
 
-    joke_id = db.Column(db.Integer, db.ForeignKey('jokes.id'))
+    joke_id = db.Column(db.Integer, db.ForeignKey('jokes.id'), nullable=False)
     joke = db.relationship('Joke')
 
-    rating = db.Column(db.Numeric(precision=3))
+    rating = db.Column(db.Numeric(precision=3), nullable=False)
 
     def __repr__(self):
         return '<Rating {:s} for joke {:d} from user {:d}>'.format(
@@ -60,6 +62,14 @@ class Rating(db.Model):
             self.joke_id,
             self.user_id,
         )
+
+    @validates('rating')
+    def validate_rating(self, key, value):
+        if not -10 <= value <= 10:
+            message = "Rating should be between -10 and 10, but it is {:.3f}"
+            raise ValueError(message.format(value))
+        else:
+            return value
 
 
 def get_users(nr_users):
@@ -116,8 +126,6 @@ def main():
                     objects = [obj for obj in objects if obj is not None]
                     db.session.bulk_save_objects(objects)
                     db.session.commit()
-
-            # db.session.commit()
 
     if 'drop' in args.todo:
 
