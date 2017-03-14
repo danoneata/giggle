@@ -31,14 +31,20 @@ Create the database:
 sudo -u postgres createuser -s jester
 # Create a new database
 createdb -U jester jester_db
+```
+
+Set up environment variables:
+
+```
 # Set the URL to the database as a system variable
 export DATABASE_URL="postgresql://jester@localhost/jester_db"
+export SECRET_KEY=???
 ```
 
 Run the script to populate the database:
 
 ```bash
-SECRET_KEY=xxx python -m giggle.models --todo init
+python -m giggle.models --todo init
 ```
 
 ```bash
