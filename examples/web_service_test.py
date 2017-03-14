@@ -1,14 +1,73 @@
+import argparse
 import json
 import pdb
 import requests
 
 
-URL = 'http://localhost:6667/predictInterests/{}'
+def add_data(args):
+    URL = 'http://localhost:6667/addData/'
+    data = json.dumps({
+        "user": args.user,
+        "joke": args.joke,
+        "rating": args.rating,
+    })
+    response = requests.post(URL, data=data)
+    print(json.dumps(json.loads(response.text), indent=4))
+
+
+def predict_interests(args):
+    URL = 'http://localhost:6667/predictInterests/{:d}'
+    response = requests.get(URL.format(args.user))
+    print(json.dumps(json.loads(response.text), indent=4))
+
+
+TODO = {
+    'add': add_data,
+    'predict': predict_interests,
+}
 
 
 def main():
-    response = requests.get(URL.format(1))
-    print(json.dumps(json.loads(response.text), indent=4))
+
+    parser = argparse.ArgumentParser(
+        description='Sends requests to the running web-service.',
+    )
+    subparsers = parser.add_subparsers(dest='command')
+
+    parser_1 = subparsers.add_parser(
+        'add',
+        help='Adds a new rating in the database',
+    )
+    parser_1.add_argument(
+        '-u', '--user',
+        type=int,
+        required=True,
+        help='user ID',
+    )
+    parser_1.add_argument(
+        '-j', '--joke',
+        type=int,
+        help='joke ID',
+    )
+    parser_1.add_argument(
+        '-r', '--rating',
+        type=float,
+        help='rating',
+    )
+
+    parser_2 = subparsers.add_parser(
+        'predict',
+        help='Predicts interests for the given user',
+    )
+    parser_2.add_argument(
+        '-u', '--user',
+        type=int,
+        required=True,
+        help='user ID',
+    )
+
+    args = parser.parse_args()
+    TODO[args.command](args)
 
 
 if __name__ == '__main__':

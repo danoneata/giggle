@@ -86,7 +86,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Get dataset into a database
 - [x] Prepare the experimental setup: create folds, write metric
 - [x] Exploratory data analysis
-- [ ] Implement "addData" REST point
+- [x] Implement "addData" REST point
 - [ ] Create a subset of the data
 - [ ] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
