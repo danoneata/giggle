@@ -28,7 +28,7 @@ from .recommender import (
 def train(args):
     # Trains recommender system
     data = load_data()
-    recommender = RECOMMENDERS[args.recommender]()
+    recommender = RECOMMENDERS[args.recommender]
     recommender.fit(data)
     save_recommender(args.recommender, recommender)
 
@@ -36,7 +36,7 @@ def train(args):
 def evaluate(args):
     # Evaluates recommender system
     data = load_data()
-    recommender = RECOMMENDERS[args.recommender]()
+    recommender = RECOMMENDERS[args.recommender]
     results = evaluate_folds(data, recommender, args.verbose)
     print_results(results)
 
