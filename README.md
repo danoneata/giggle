@@ -124,6 +124,10 @@ Below there are some resources that discuss collaborative filtering: the courses
 - David Barber: [Bayesian Reasoning and Machine Learning](https://www.amazon.com/Bayesian-Reasoning-Machine-Learning-Barber/dp/0521518148/ref=sr_1_1?ie=UTF8&qid=1488878372&sr=8-1&keywords=bayesian+reasoning+and+machine+learning)
 - Kevin Murphy: [Machine Learning: A Probabilistic Approach](https://www.amazon.com/Machine-Learning-Probabilistic-Perspective-Computation/dp/0262018020/ref=sr_1_1?ie=UTF8&qid=1488878389&sr=8-1&keywords=machine+learning+a+probabilistic+perspective)
 
+Papers on collaborative filtering:
+
+- Y. Koren. [Factor in the Neighbors: Scalable and accurate collaborative filtering](http://courses.ischool.berkeley.edu/i290-dm/s11/SECURE/a1-koren.pdf). In ACM Transactions on Knowledge Discovery from Data, 2010.
+
 ### Coursera Stanford: Machine Learning
 
 - Introduction into collaborative filtering
