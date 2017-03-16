@@ -87,19 +87,20 @@ mypy --fast-parser --incremental -m giggle
 - [x] Prepare the experimental setup: create folds, write metric
 - [x] Exploratory data analysis
 - [x] Implement "addData" REST point
-- [x] Create a subset of the data
 - [x] Implement and evaluate some baselines
-- [ ] Implement and evaluate an item-based prediction method
-- [ ] Implement and evaluate a matrix factorization method
-- [ ] Implement more entry points: find similar jokes to a given joke
 - [ ] Add a class for dataset
+- [ ] Create a subset of the data
+- [ ] Implement and evaluate an item-based prediction method
+- [ ] Understand results: visualize similarity matrix, baselines, compare methods
+- [ ] Regenerate database with not-nullable constraint and float ratings
+- [ ] Implement more entry points: find similar jokes to a given joke
 - [ ] Update recommender and dataset in the `addData` entrypoint
-- [ ] Extra: Predict ratings from items' features
 - [ ] Check code to be PEP8-compliant
 - [ ] Add type annotations
 - [ ] Add tests
-- [ ] Regenerate database with not-nullable constraint
 - [ ] Clean up `README.md`: split in `TODO.md` and `IDEAS.md`
+- [ ] Implement and evaluate a matrix factorization method
+- [ ] Extra: Predict ratings from items' features
 
 ## Ideas
 
