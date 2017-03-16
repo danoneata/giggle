@@ -60,6 +60,7 @@ class GaussianRecommender(Recommender):
             random_state=self.random_state,
         )
 
+
 class BetaRecommender(Recommender):
     pass
 

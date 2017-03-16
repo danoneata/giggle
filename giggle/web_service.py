@@ -19,6 +19,11 @@ from logging import config as cfg
 
 from json import dumps
 
+from typing import (
+    Tuple,
+    Dict,
+)
+
 from .config import Config
 
 from .recommender import (

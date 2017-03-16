@@ -91,6 +91,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Implement and evaluate some baselines
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Implement and evaluate a matrix factorization method
+- [ ] Implement more entry points: find similar jokes to a given joke
 - [ ] Extra: Predict ratings from items' features
 - [ ] Check code to be PEP8-compliant
 - [ ] Add type annotations
@@ -106,7 +107,7 @@ From [CS281, Assignment 3](http://www.seas.harvard.edu/courses/cs281/files/assig
 
 From Programming Collective Intelligence, chapter 2, exercise 5:
 
-> Audioscrobbler. Take a look at http://www.audioscrobbler.net, a dataset contain- ing music preferences for a large set of users. Use their web services API to get a set of data for making and building a music recommendation system.
+> Audioscrobbler. Take a look at http://www.audioscrobbler.net, a dataset containing music preferences for a large set of users. Use their web services API to get a set of data for making and building a music recommendation system.
 
 ## Resources
 
