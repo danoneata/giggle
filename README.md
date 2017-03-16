@@ -92,6 +92,8 @@ mypy --fast-parser --incremental -m giggle
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Implement and evaluate a matrix factorization method
 - [ ] Implement more entry points: find similar jokes to a given joke
+- [ ] Add a class for dataset
+- [ ] Update recommender and dataset in the `addData` entrypoint
 - [ ] Extra: Predict ratings from items' features
 - [ ] Check code to be PEP8-compliant
 - [ ] Add type annotations
