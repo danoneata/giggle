@@ -135,10 +135,38 @@ class BaselineRecommender(Recommender):
         return self.mu + self.b_user[user_id] + self.b_joke[joke_id]
 
 
+class Neighbourhood(Recommender):
+
+    def __init__(self, k):
+        self.k = k
+        self.sim = None
+
+    def _compute_item_similarities(self, data):
+        pass
+
+    def _find_most_similar_jokes(self, data):
+        pass
+
+    def fit(self, data: DataFrame) -> Recommender:
+        self.data = data
+        self.sim = self._compute_item_similarities(data)
+        return self
+
+    def predict(self, user_id: int, joke_id: int) -> float:
+        jokes = self._find_most_similar_jokes(joke_id)
+        jokes = jokes[:self.k]
+        sum_rat = sum(self.sim[j, joke_id] * self.data.ratings[user_id, j] for j in jokes)
+        sum_sim = sum(self.sim[j, joke_id] for j in jokes)
+        return sum_rat / sum_sim
+
+
 RECOMMENDERS = {
     'gaussian': GaussianRecommender(),
     'beta': BetaRecommender(),
-    'baseline': BaselineRecommender(5, 0.01, 0.1),
+    'baseline': BaselineRecommender(nr_epochs=5, lr=0.01, reg=0.1),
+    'neigh': Neighbourhood(k=10),
+    # 'neigh_mean': Neighbourhood(),
+    # 'neigh_base': Neighbourhood(),
 }
 
 
