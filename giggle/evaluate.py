@@ -30,10 +30,11 @@ def evaluate_fold(i: int, dataset: Dataset, recommender: Recommender, verbose: i
     if verbose:
         print('-- Fold', i)
     tr_idxs, te_idxs = dataset.load_fold(i)
-    tr_data, te_data = dataset.data_frame.ix[tr_idxs], dataset.data_frame.ix[te_idxs]
-    recommender.fit(Data(tr_data))
-    true = te_data.rating
-    pred = recommender.predict_multi(te_data[['user_id', 'joke_id']].values)
+    tr_data = dataset.get_data(dataset.data_frame.ix[tr_idxs])
+    te_data = dataset.get_data(dataset.data_frame.ix[te_idxs])
+    recommender.fit(tr_data)
+    true = te_data.data_frame.rating
+    pred = recommender.predict_multi(te_data.data_frame[['user_id', 'joke_id']].values)
     return rmse(true, pred)
 
 

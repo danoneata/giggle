@@ -18,6 +18,7 @@ from typing import (
 
 from .data import (
     Data,
+    data_to_user_joke_matrix,
 )
 
 
@@ -135,26 +136,27 @@ class BaselineRecommender(Recommender):
 
 class Neighbourhood(Recommender):
 
-    def __init__(self, k):
+    def __init__(self, k: int) -> None:
         self.k = k
-        self.sim = None
 
-    def _compute_item_similarities(self, data):
-        pass
-
-    def _find_most_similar_jokes(self, data):
-        pass
+    def _find_most_similar_jokes(self, joke_id: int) -> List[int]:
+        i = self.data.joke_to_iid[joke_id]
+        joke_iids = np.argsort(-self.sims[i])
+        joke_iids = joke_iids[1: self.k + 1]
+        return joke_iids
 
     def fit(self, data: Data) -> Recommender:
-        self.data = data.data_frame
-        self.sim = self._compute_item_similarities(data)
+        self.user_joke_matrix = data_to_user_joke_matrix(data)
+        self.sims = np.corrcoef(self.user_joke_matrix.T)
+        self.data = data
         return self
 
     def predict(self, user_id: int, joke_id: int) -> float:
+        user_iid = self.data.user_to_iid[user_id]
+        joke_iid = self.data.joke_to_iid[joke_id]
         jokes = self._find_most_similar_jokes(joke_id)
-        jokes = jokes[:self.k]
-        sum_rat = sum(self.sim[j, joke_id] * self.data.ratings[user_id, j] for j in jokes)
-        sum_sim = sum(self.sim[j, joke_id] for j in jokes)
+        sum_rat = sum(self.sims[j, joke_iid] * self.user_joke_matrix[user_iid, j] for j in jokes)
+        sum_sim = sum(self.sims[j, joke_iid] for j in jokes)
         return sum_rat / sum_sim
 
 

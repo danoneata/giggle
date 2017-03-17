@@ -2,6 +2,8 @@ import os
 import pdb
 import random
 
+from collections import namedtuple
+
 from functools import partial
 
 from itertools import (
@@ -22,7 +24,9 @@ from sklearn.model_selection import KFold  # type: ignore
 from sqlalchemy.engine import create_engine  # type: ignore
 
 from typing import (
+    Any,
     Callable,
+    Dict,
     List,
     Optional,
     Tuple,
@@ -32,32 +36,39 @@ from typing import (
 SEED = 1337
 
 
+# Wrapper over data frame to include useful attributes
+Data = namedtuple('Data', 'data_frame users jokes user_to_iid joke_to_iid')
+
+
 class Dataset:
 
     def __init__(self, nr_folds: int, subsample: Optional[Callable]=None) -> None:
         self.nr_folds = nr_folds
-        self._load(subsample)
-        self._create_folds()
+        self.data_frame = self._load_data_frame(subsample)
+        self.folds = self._get_folds()
+        self.users = sorted(self.data_frame.user_id.unique())
+        self.jokes = sorted(self.data_frame.joke_id.unique())
+        self.user_to_iid = dict(zip(self.users, count()))
+        self.joke_to_iid = dict(zip(self.jokes, count()))
 
-    def _load(self, subsample: Optional[Callable]) -> "Dataset":
+    def _load_data_frame(self, subsample: Optional[Callable]) -> DataFrame:
         url = os.getenv('DATABASE_URL')
         con = create_engine(url)
         # self.data_frame = next(read_sql_table('ratings', con, chunksize=5000))
-        self.data_frame = read_sql_table('ratings', con)
-        self.data_frame = subsample(self.data_frame) if subsample else self.data_frame
-        return self
+        data_frame = read_sql_table('ratings', con)
+        data_frame = subsample(data_frame) if subsample else data_frame
+        return data_frame
 
-    def _create_folds(self) -> "Dataset":
+    def _get_folds(self) -> Dict[int, Dict[str, Any]]:
         index = np.arange(len(self.data_frame))
         kf = KFold(n_splits=self.nr_folds, shuffle=True, random_state=SEED)
-        self.folds = {
+        return {
             i: {
                 'tr': tr_index,
                 'te': te_index,
             }
             for i, (tr_index, te_index) in enumerate(kf.split(index))
         }
-        return self
 
     def load_split_fold(self, split: str, i: int) -> List[int]:
         return self.folds[i][split]
@@ -68,24 +79,10 @@ class Dataset:
             self.load_split_fold('te', i),
         )
 
-
-class Data(object):
-    """Wrapper over data frame to include useful attributes"""
-
-    __slots__ = [
-        'data_frame',
-        'users',
-        'jokes',
-        'user_to_iid',
-        'joke_to_iid',
-    ]
-
-    def __init__(self, data_frame: DataFrame) -> None:
-        self.data_frame = data_frame
-        self.users = sorted(data_frame.user_id.unique())
-        self.jokes = sorted(data_frame.joke_id.unique())
-        self.user_to_iid = dict(zip(self.users, count()))
-        self.joke_to_iid = dict(zip(self.jokes, count()))
+    def get_data(self, data_frame=None) -> Data:
+        if data_frame is None:
+            data_frame = self.data_frame
+        return Data(data_frame, self.users, self.jokes, self.user_to_iid, self.joke_to_iid)
 
 
 def pick_from_random_users(data_frame: DataFrame, nr_users: int) -> DataFrame:
@@ -103,6 +100,16 @@ DATASETS = {
     'large': lambda: Dataset(nr_folds=3),
     'small': lambda: Dataset(nr_folds=3, subsample=pick_from_300_random_users),
 }
+
+
+def data_to_user_joke_matrix(data: Data) -> np.array:
+    n_users = len(data.users)
+    n_jokes = len(data.jokes)
+    mu = data.data_frame.rating.mean()
+    user_joke_matrix = np.zeros((n_users, n_jokes)) + mu
+    for _, _, u, j, r in data.data_frame.itertuples():
+        user_joke_matrix[data.user_to_iid[u], data.joke_to_iid[j]] = r
+    return user_joke_matrix
 
 
 def iqr(xs):
