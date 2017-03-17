@@ -12,6 +12,7 @@ from typing import (
 
 from .data import (
     DATASETS,
+    Data,
 )
 
 from .evaluate import (
@@ -29,7 +30,7 @@ def train(args):
     # Trains recommender system
     dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
-    recommender.fit(dataset)
+    recommender.fit(Data(dataset.data_frame))
     save_recommender(args.recommender, recommender)
 
 

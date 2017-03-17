@@ -5,10 +5,6 @@ from collections import defaultdict
 
 import numpy as np  # type: ignore
 
-from pandas import (  # type: ignore
-    DataFrame,
-)
-
 from scipy.stats import (  # type: ignore
     beta,
     norm,
@@ -20,10 +16,14 @@ from typing import (
     Tuple,
 )
 
+from .data import (
+    Data,
+)
+
 
 class Recommender:
 
-    def fit(self, data: DataFrame):
+    def fit(self, data: Data):
         pass
 
     def predict(self, user_id: int, joke_id: int) -> float:
@@ -41,9 +41,9 @@ class GaussianRecommender(Recommender):
     def __init__(self):
         self.random_state = 1337
 
-    def fit(self, data: DataFrame):
-        self.mu = data.rating.mean()
-        self.sigma = data.rating.std()
+    def fit(self, data: Data):
+        self.mu = data.data_frame.rating.mean()
+        self.sigma = data.data_frame.rating.std()
         return self
 
     def predict(self, user_id: int, joke_id: int) -> float:
@@ -70,12 +70,12 @@ class BetaRecommender(Recommender):
     def __init__(self):
         self.random_state = 1337
 
-    def fit(self, data: DataFrame):
+    def fit(self, data: Data):
         eps = 10 ** -1
-        min_rating = data.rating.min() - eps
-        max_rating = data.rating.max() + eps
+        min_rating = data.data_frame.rating.min() - eps
+        max_rating = data.data_frame.rating.max() + eps
         a, b, loc, scale = beta.fit(
-            data.rating,
+            data.data_frame.rating,
             floc=min_rating,
             fscale=max_rating - min_rating,
         )
@@ -118,14 +118,12 @@ class BaselineRecommender(Recommender):
         self.b_user = None
         self.b_joke = None
 
-    def fit(self, data: DataFrame) -> Recommender:
-        self.mu = data.rating.mean()
-        nr_users = len(data.user_id.unique())
-        nr_jokes = len(data.joke_id.unique())
+    def fit(self, data: Data) -> Recommender:
+        self.mu = data.data_frame.rating.mean()
         self.b_user = defaultdict(int)
         self.b_joke = defaultdict(int)
         for e in range(self.nr_epochs):
-            for _, i, u, j, r in data.itertuples():
+            for _, i, u, j, r in data.data_frame.itertuples():
                 err = r - (self.mu + self.b_user[u] + self.b_joke[j])
                 self.b_user[u] += self.lr * (err - self.reg * self.b_user[u])
                 self.b_joke[j] += self.lr * (err - self.reg * self.b_joke[j])
@@ -147,8 +145,8 @@ class Neighbourhood(Recommender):
     def _find_most_similar_jokes(self, data):
         pass
 
-    def fit(self, data: DataFrame) -> Recommender:
-        self.data = data
+    def fit(self, data: Data) -> Recommender:
+        self.data = data.data_frame
         self.sim = self._compute_item_similarities(data)
         return self
 

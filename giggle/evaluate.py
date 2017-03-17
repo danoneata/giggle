@@ -15,6 +15,7 @@ from typing import (
 )
 
 from .data import (
+    Data,
     Dataset,
 )
 
@@ -29,7 +30,7 @@ def evaluate_fold(i: int, dataset: Dataset, recommender: Recommender, verbose: i
     if verbose: print('-- Fold', i)
     tr_idxs, te_idxs = dataset.load_fold(i)
     tr_data, te_data = dataset.data_frame.ix[tr_idxs], dataset.data_frame.ix[te_idxs]
-    recommender.fit(tr_data)
+    recommender.fit(Data(tr_data))
     true = te_data.rating
     pred = recommender.predict_multi(te_data[['user_id', 'joke_id']].values)
     return rmse(true, pred)

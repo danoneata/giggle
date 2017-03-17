@@ -4,6 +4,10 @@ import random
 
 from functools import partial
 
+from itertools import (
+    count,
+)
+
 import matplotlib.pyplot as plt  # type: ignore
 
 import numpy as np  # type: ignore
@@ -63,6 +67,25 @@ class Dataset:
             self.load_split_fold('tr', i),
             self.load_split_fold('te', i),
         )
+
+
+class Data(object):
+    """Wrapper over data frame to include useful attributes"""
+
+    __slots__ = [
+        'data_frame',
+        'users',
+        'jokes',
+        'user_to_iid',
+        'joke_to_iid',
+    ]
+
+    def __init__(self, data_frame: DataFrame) -> None:
+        self.data_frame = data_frame
+        self.users = sorted(data_frame.user_id.unique())
+        self.jokes = sorted(data_frame.joke_id.unique())
+        self.user_to_iid = dict(zip(self.users, count()))
+        self.joke_to_iid = dict(zip(self.jokes, count()))
 
 
 def pick_from_random_users(data_frame: DataFrame, nr_users: int) -> DataFrame:
