@@ -30,7 +30,7 @@ def train(args):
     # Trains recommender system
     dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
-    recommender.fit(Data(dataset.data_frame))
+    recommender.fit(Data(dataset.data_frame), verbose=args.verbose)
     save_recommender(args.recommender, recommender)
 
 

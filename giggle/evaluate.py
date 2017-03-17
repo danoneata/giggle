@@ -6,8 +6,6 @@ from pandas import (  # type: ignore
     DataFrame,
 )
 
-from sklearn.metrics import mean_squared_error  # type: ignore
-
 from typing import (
     Any,
     Dict,
@@ -19,11 +17,10 @@ from .data import (
     Dataset,
 )
 
-from .recommender import Recommender
-
-
-def rmse(y_true, y_pred):
-    return np.sqrt(mean_squared_error(y_true, y_pred))
+from .recommender import (
+    Recommender,
+    rmse,
+)
 
 
 def evaluate_fold(i: int, dataset: Dataset, recommender: Recommender, verbose: int=0) -> float:
@@ -32,7 +29,7 @@ def evaluate_fold(i: int, dataset: Dataset, recommender: Recommender, verbose: i
     tr_idxs, te_idxs = dataset.load_fold(i)
     tr_data = dataset.get_data(dataset.data_frame.ix[tr_idxs])
     te_data = dataset.get_data(dataset.data_frame.ix[te_idxs])
-    recommender.fit(tr_data)
+    recommender.fit(tr_data, verbose)
     true = te_data.data_frame.rating
     pred = recommender.predict_multi(te_data.data_frame[['user_id', 'joke_id']].values)
     return rmse(true, pred)

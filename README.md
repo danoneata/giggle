@@ -92,7 +92,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Add a class for dataset
 - [x] Create a subset of the data for quick testing
 - [x] Implement and evaluate an item-based prediction method
-- [ ] Improve baseline recommender to monitor cross-validation error
+- [x] Improve baseline recommender to monitor RMSE metric and stop the changes are small
 - [ ] Understand results: visualize similarity matrix, baselines, compare methods
 - [ ] Regenerate database with not-nullable constraint and float ratings
 - [ ] Implement more entry points: find similar jokes to a given joke
