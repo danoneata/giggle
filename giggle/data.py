@@ -1,11 +1,15 @@
 import os
 import pdb
+import random
+
+from functools import partial
 
 import matplotlib.pyplot as plt  # type: ignore
 
 import numpy as np  # type: ignore
 
 from pandas import (  # type: ignore
+    DataFrame,
     read_sql_table,
 )
 
@@ -16,27 +20,32 @@ from sqlalchemy.engine import create_engine  # type: ignore
 from typing import (
     Callable,
     List,
+    Optional,
     Tuple,
 )
 
 
+SEED = 1337
+
+
 class Dataset:
 
-    def __init__(self, nr_folds):
+    def __init__(self, nr_folds: int, subsample: Optional[Callable]=None) -> None:
         self.nr_folds = nr_folds
-        self.load()
-        self.create_folds()
+        self._load(subsample)
+        self._create_folds()
 
-    def load(self) -> "Dataset":
+    def _load(self, subsample: Optional[Callable]) -> "Dataset":
         url = os.getenv('DATABASE_URL')
         con = create_engine(url)
         # self.data_frame = next(read_sql_table('ratings', con, chunksize=5000))
         self.data_frame = read_sql_table('ratings', con)
+        self.data_frame = subsample(self.data_frame) if subsample else self.data_frame
         return self
 
-    def create_folds(self) -> "Dataset":
+    def _create_folds(self) -> "Dataset":
         index = np.arange(len(self.data_frame))
-        kf = KFold(n_splits=self.nr_folds, shuffle=True, random_state=1337)
+        kf = KFold(n_splits=self.nr_folds, shuffle=True, random_state=SEED)
         self.folds = {
             i : {
                 'tr': tr_index,
@@ -56,8 +65,20 @@ class Dataset:
         )
 
 
+def pick_from_random_users(data_frame: DataFrame, nr_users: int) -> DataFrame:
+    "Pick ratings from random users"
+    random.seed(SEED)
+    user_ids = random.sample(list(data_frame.user_id.unique()), nr_users)
+    data_frame = data_frame[data_frame.user_id.isin(user_ids)]
+    return data_frame.reset_index(drop=True, inplace=False)
+
+
+pick_from_300_random_users = lambda d: pick_from_random_users(d, nr_users=300)
+
+
 DATASETS = {
     'large': lambda: Dataset(nr_folds=3),
+    'small': lambda: Dataset(nr_folds=3, subsample=pick_from_300_random_users),
 }
 
 

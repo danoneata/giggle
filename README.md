@@ -85,7 +85,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Implement "addData" REST point
 - [x] Implement and evaluate some baselines
 - [x] Add a class for dataset
-- [ ] Create a subset of the data
+- [x] Create a subset of the data for quick testing
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Understand results: visualize similarity matrix, baselines, compare methods
 - [ ] Regenerate database with not-nullable constraint and float ratings
