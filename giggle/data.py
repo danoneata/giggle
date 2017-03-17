@@ -9,6 +9,8 @@ from pandas import (  # type: ignore
     read_sql_table,
 )
 
+from sklearn.model_selection import KFold  # type: ignore
+
 from sqlalchemy.engine import create_engine  # type: ignore
 
 from typing import (
@@ -18,23 +20,45 @@ from typing import (
 )
 
 
-FOLDS = range(1, 11)
+class Dataset:
+
+    def __init__(self, nr_folds):
+        self.nr_folds = nr_folds
+        self.load()
+        self.create_folds()
+
+    def load(self) -> "Dataset":
+        url = os.getenv('DATABASE_URL')
+        con = create_engine(url)
+        # self.data_frame = next(read_sql_table('ratings', con, chunksize=5000))
+        self.data_frame = read_sql_table('ratings', con)
+        return self
+
+    def create_folds(self) -> "Dataset":
+        index = np.arange(len(self.data_frame))
+        kf = KFold(n_splits=self.nr_folds, shuffle=True, random_state=1337)
+        self.folds = {
+            i : {
+                'tr': tr_index,
+                'te': te_index,
+            }
+            for i, (tr_index, te_index) in enumerate(kf.split(index))
+        }
+        return self
+
+    def load_split_fold(self, split: str, i: int) -> List[int]:
+        return self.folds[i][split]
+
+    def load_fold(self, i: int) -> Tuple[List[int], List[int]]:
+        return (
+            self.load_split_fold('tr', i),
+            self.load_split_fold('te', i),
+        )
 
 
-def load_data():
-    url = os.getenv('DATABASE_URL')
-    con = create_engine(url)
-    # return next(read_sql_table('ratings', con, chunksize=5000))
-    return read_sql_table('ratings', con)
-
-
-def load_split_fold(split: str, i: int) -> List[int]:
-    with open('data/folds/{}_{:02d}.txt'.format(split, i), 'r') as f:
-        return list(map(int, f.readlines()))
-
-
-def load_fold(i: int) -> Tuple[List[int], List[int]]:
-    return load_split_fold('train', i), load_split_fold('test', i)
+DATASETS = {
+    'large': lambda: Dataset(nr_folds=3),
+}
 
 
 def iqr(xs):

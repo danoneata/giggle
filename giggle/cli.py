@@ -11,7 +11,7 @@ from typing import (
 )
 
 from .data import (
-    load_data,
+    DATASETS,
 )
 
 from .evaluate import (
@@ -27,17 +27,17 @@ from .recommender import (
 
 def train(args):
     # Trains recommender system
-    data = load_data()
+    dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
-    recommender.fit(data)
+    recommender.fit(dataset)
     save_recommender(args.recommender, recommender)
 
 
 def evaluate(args):
     # Evaluates recommender system
-    data = load_data()
+    dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
-    results = evaluate_folds(data, recommender, args.verbose)
+    results = evaluate_folds(dataset, recommender, args.verbose)
     print_results(results)
 
 
@@ -71,7 +71,8 @@ def main():
     )
     parser_1.add_argument(
         '-d', '--dataset',
-        # required=True,
+        required=True,
+        choices=DATASETS,
         help='which dataset to use.',
     )
     parser_1.add_argument(
@@ -94,7 +95,8 @@ def main():
     )
     parser_2.add_argument(
         '-d', '--dataset',
-        # required=True,
+        required=True,
+        choices=DATASETS,
         help='which dataset to use.',
     )
     parser_2.add_argument(

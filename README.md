@@ -47,10 +47,6 @@ Run the script to populate the database:
 python -m giggle.models --todo init
 ```
 
-```bash
-python scripts/create_folds.py
-```
-
 # Usage
 
 The command line interface, `giggle`, exposes three sub-commands (see the [next section](#details-and-examples) for more details and examples):
@@ -88,7 +84,7 @@ mypy --fast-parser --incremental -m giggle
 - [x] Exploratory data analysis
 - [x] Implement "addData" REST point
 - [x] Implement and evaluate some baselines
-- [ ] Add a class for dataset
+- [x] Add a class for dataset
 - [ ] Create a subset of the data
 - [ ] Implement and evaluate an item-based prediction method
 - [ ] Understand results: visualize similarity matrix, baselines, compare methods
