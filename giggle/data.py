@@ -51,7 +51,7 @@ class Dataset:
         index = np.arange(len(self.data_frame))
         kf = KFold(n_splits=self.nr_folds, shuffle=True, random_state=SEED)
         self.folds = {
-            i : {
+            i: {
                 'tr': tr_index,
                 'te': te_index,
             }
@@ -106,7 +106,7 @@ DATASETS = {
 
 
 def iqr(xs):
-    q75, q25 = np.percentile(xs, [75 ,25])
+    q75, q25 = np.percentile(xs, [75, 25])
     return q75 - q25
 
 
@@ -119,7 +119,7 @@ def compute_nr_bins(counts):
 
 
 def describe_data(data):
-    counts = [ 
+    counts = [
         ('ratings', len(data)),
         ('users', len(data.user_id.unique())),
         ('jokes', len(data.joke_id.unique())),

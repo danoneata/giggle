@@ -68,7 +68,12 @@ giggle predict --help
 
 In order to keep code-base standardized, I have tried:
 
-* to keep the code [PEP8](ihttps://www.python.org/dev/peps/pep-0008/) compliant.
+* to keep the code [PEP8](ihttps://www.python.org/dev/peps/pep-0008/) compliant:
+
+```bash
+find examples giggle scripts -name '*py' | xargs pep8 --ignore E501
+```
+
 * to add [type annotations](https://docs.python.org/3/library/typing.html) and make sure `mypy` accepts it:
 
 ```bash
