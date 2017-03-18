@@ -82,5 +82,5 @@ mypy --fast-parser --incremental -m giggle
 
 In order to keep the project organized, I am keeping:
 
-* [a list of things to do](TODO.md)
-* [a list of ideas and resources](IDEAS.md)
+* [a list of things to do](../blob/master/TODO.md)
+* [a list of ideas and resources](../blob/master/IDEAS.md)
