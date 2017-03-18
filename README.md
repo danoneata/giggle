@@ -92,7 +92,7 @@ giggle train -d large -r neigh -v
 RECOMMENDER=neigh giggle web -v
 ```
 
-In order to check that the web-service is running properly, you can use the [`web_service_test.py`](examples/web_service_test.py) script. Here are some examples:
+In order to check that the web-service is running properly, you can use [this script](../blob/master/examples/web_service_test.py). Here are some examples:
 
 ```bash
 python examples/web_service_test.py predict -u 21
