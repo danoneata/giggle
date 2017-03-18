@@ -68,10 +68,10 @@ def predict_interests(user_id):
 @app.route('/addData/', methods=['POST'])
 @wrap_exceptions_logger
 def add_data():
-    if not request.json or 'data' not in request.json:
-        return "Bad request", 400
-    else:
-        json_data = request.get_json('data')
+    json_data = request.get_json()
+
+    if not json_data:
+        return jsonify("Bad request"), 400
 
     rating = Rating(
         user_id=json_data.get('user'),

@@ -6,12 +6,12 @@ import requests
 
 def add_data(args):
     URL = 'http://localhost:6667/addData/'
-    data = json.dumps({
+    data = {
         "user": args.user,
         "joke": args.joke,
         "rating": args.rating,
-    })
-    response = requests.post(URL, data=data)
+    }
+    response = requests.post(URL, json=data)
     print(json.dumps(json.loads(response.text), indent=4))
 
 
