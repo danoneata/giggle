@@ -16,12 +16,12 @@ Keeping track of the things to do:
 - [x] Implement and evaluate an item-based prediction method
 - [x] Improve baseline recommender to monitor RMSE metric and stop the changes are small
 - [x] Understand results: visualize similarity matrix, baselines, compare methods
+- [x] Clean up `README.md`: split in `TODO.md` and `IDEAS.md`
 - [ ] Write details on each algorithm
 - [ ] Save evaluation report to disk
 - [ ] Regenerate database with not-nullable constraint and float ratings
 - [ ] Add unit tests
 - [ ] Add integration tests
-- [ ] Clean up `README.md`: split in `TODO.md` and `IDEAS.md`
 - [ ] Implement a more advanced neighbouring method that uses baselines as well
 - [?] Update recommender and dataset in the `addData` entrypoint
 - [ ] Extra: Implement more entry points: find similar jokes to a given joke
