@@ -93,12 +93,12 @@ def pick_from_random_users(data_frame: DataFrame, nr_users: int) -> DataFrame:
     return data_frame.reset_index(drop=True, inplace=False)
 
 
-pick_from_300_random_users = lambda d: pick_from_random_users(d, nr_users=1500)
+pick_from_1500_random_users = lambda d: pick_from_random_users(d, nr_users=1500)
 
 
 DATASETS = {
     'large': lambda: Dataset(nr_folds=3),
-    'small': lambda: Dataset(nr_folds=3, subsample=pick_from_300_random_users),
+    'small': lambda: Dataset(nr_folds=3, subsample=pick_from_1500_random_users),
 }
 
 
