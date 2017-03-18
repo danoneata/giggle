@@ -27,6 +27,7 @@ from typing import (
 from .config import Config
 
 from .recommender import (
+    get_recommender_path,
     load_recommender,
 )
 
@@ -48,7 +49,7 @@ logger = logging.getLogger('web-service')
 wrap_exceptions_logger = partial(wrap_exceptions, logger=logger)
 
 
-recommender = load_recommender(os.getenv('RECOMMENDER'))
+recommender = load_recommender(get_recommender_path(os.getenv('RECOMMENDER')))
 
 
 @app.route('/predictInterests/<user_id>')

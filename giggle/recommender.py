@@ -201,14 +201,16 @@ RECOMMENDERS = {
 }
 
 
-PATH = 'data/models/{}.pkl'
+def get_recommender_path(key: str) -> str:
+    PATH = 'data/models/{}.pkl'
+    return PATH.format(key)
 
 
-def save_recommender(key: str, recommender: Recommender):
-    with open(PATH.format(key), 'wb') as f:
+def save_recommender(path: str, recommender: Recommender):
+    with open(path, 'wb') as f:
         pickle.dump(recommender, f)
 
 
-def load_recommender(key: str) -> Recommender:
-    with open(PATH.format(key), 'rb') as f:
+def load_recommender(path: str) -> Recommender:
+    with open(path, 'rb') as f:
         return pickle.load(f)

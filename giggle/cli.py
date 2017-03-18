@@ -22,6 +22,7 @@ from .evaluate import (
 
 from .recommender import (
     RECOMMENDERS,
+    get_recommender_path,
     save_recommender,
 )
 
@@ -31,7 +32,7 @@ def train(args):
     dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
     recommender.fit(dataset.get_data(), verbose=args.verbose)
-    save_recommender(args.recommender, recommender)
+    save_recommender(get_recommender_path(args.recommender), recommender)
 
 
 def evaluate(args):
