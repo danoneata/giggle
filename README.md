@@ -82,6 +82,8 @@ mypy --fast-parser --incremental -m giggle
 
 ## TODO
 
+- [-] Add type annotations
+- [-] Check code to be PEP8-compliant
 - [x] Build high-level API
 - [x] Decide upon a dataset
 - [x] Get dataset into a database
@@ -93,15 +95,17 @@ mypy --fast-parser --incremental -m giggle
 - [x] Create a subset of the data for quick testing
 - [x] Implement and evaluate an item-based prediction method
 - [x] Improve baseline recommender to monitor RMSE metric and stop the changes are small
-- [ ] Understand results: visualize similarity matrix, baselines, compare methods
+- [x] Understand results: visualize similarity matrix, baselines, compare methods
+- [ ] Write details on each algorithm
+- [ ] Save evaluation report to disk
 - [ ] Regenerate database with not-nullable constraint and float ratings
-- [ ] Implement more entry points: find similar jokes to a given joke
-- [ ] Update recommender and dataset in the `addData` entrypoint
-- [ ] Check code to be PEP8-compliant
-- [ ] Add type annotations
-- [ ] Add tests
+- [ ] Add unit tests
+- [ ] Add integration tests
 - [ ] Clean up `README.md`: split in `TODO.md` and `IDEAS.md`
-- [ ] Implement and evaluate a matrix factorization method
+- [ ] Implement a more advanced neighbouring method that uses baselines as well
+- [?] Update recommender and dataset in the `addData` entrypoint
+- [ ] Extra: Implement more entry points: find similar jokes to a given joke
+- [ ] Extra: Implement and evaluate a matrix factorization method
 - [ ] Extra: Predict ratings from items' features
 
 ## Ideas
