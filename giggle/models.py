@@ -13,6 +13,11 @@ import numpy as np  # type: ignore
 
 from sqlalchemy.orm import validates  # type: ignore
 
+from sqlalchemy import (  # type: ignore
+    PrimaryKeyConstraint,
+    UniqueConstraint,
+)
+
 from .config import Config
 
 from .utils import grouper
@@ -46,8 +51,6 @@ class Rating(db.Model):  # type: ignore
 
     __tablename__ = 'ratings'
 
-    id = db.Column(db.Integer, primary_key=True)
-
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('User')
 
@@ -55,6 +58,11 @@ class Rating(db.Model):  # type: ignore
     joke = db.relationship('Joke')
 
     rating = db.Column(db.Float, nullable=False)
+
+    __table_args__ = (
+        PrimaryKeyConstraint("user_id", "joke_id"),
+        UniqueConstraint("user_id", "joke_id"),
+    )
 
     def __repr__(self):
         return '<Rating {:.3f} for joke {:d} from user {:d}>'.format(

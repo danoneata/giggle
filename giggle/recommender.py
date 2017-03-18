@@ -132,14 +132,14 @@ class BaselineRecommender(Recommender):
 
     def _compute_rmse(self, data_frame: DataFrame) -> float:
         true = data_frame.rating
-        pred = [self.predict(u, j) for _, _, u, j, _ in data_frame.itertuples()]
+        pred = [self.predict(u, j) for _, u, j, _ in data_frame.itertuples()]
         return rmse(true, pred)
 
     def _update_params(self, data: Data) -> Iterable[None]:
         self.b_user = defaultdict(int)
         self.b_joke = defaultdict(int)
         for e in range(self.nr_epochs):
-            for _, i, u, j, r in data.data_frame.itertuples():
+            for _, u, j, r in data.data_frame.itertuples():
                 err = r - (self.mu + self.b_user[u] + self.b_joke[j])
                 self.b_user[u] += self.lr * (err - self.reg * self.b_user[u])
                 self.b_joke[j] += self.lr * (err - self.reg * self.b_joke[j])

@@ -82,5 +82,4 @@ def add_data():
     db.session.add(rating)
     db.session.commit()
 
-    json_data.update({'id': rating.id})
     return jsonify(json_data), 201

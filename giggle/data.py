@@ -107,7 +107,7 @@ def data_to_user_joke_matrix(data: Data) -> np.array:
     n_jokes = len(data.jokes)
     mu = data.data_frame.rating.mean()
     user_joke_matrix = np.zeros((n_users, n_jokes)) + mu
-    for _, _, u, j, r in data.data_frame.itertuples():
+    for _, u, j, r in data.data_frame.itertuples():
         user_joke_matrix[data.user_to_iid[u], data.joke_to_iid[j]] = r
     return user_joke_matrix
 

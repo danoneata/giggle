@@ -20,7 +20,7 @@ Keeping track of the things to do:
 - [x] Add unit tests
 - [x] Add integration tests
 - [x] README: Add details and command line examples
-- [ ] Regenerate database with not-nullable constraint and float ratings
+- [x] Regenerate database with not-nullable constraint and float ratings
 - [ ] Notebook: Write details on each algorithm
 - [ ] Implement a more advanced neighbouring method that uses baselines as well
 - [?] Extra: Create a new entry point to retrieve jokes similar to a given joke
