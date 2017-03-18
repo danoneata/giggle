@@ -54,10 +54,10 @@ class Rating(db.Model):  # type: ignore
     joke_id = db.Column(db.Integer, db.ForeignKey('jokes.id'), nullable=False)
     joke = db.relationship('Joke')
 
-    rating = db.Column(db.Numeric(precision=3), nullable=False)
+    rating = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
-        return '<Rating {:s} for joke {:d} from user {:d}>'.format(
+        return '<Rating {:.3f} for joke {:d} from user {:d}>'.format(
             self.rating,
             self.joke_id,
             self.user_id,
