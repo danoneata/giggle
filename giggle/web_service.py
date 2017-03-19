@@ -62,6 +62,7 @@ def get_unrated_jokes(user_id: int) -> List[int]:
 @app.route('/predictInterests/<user_id>')
 @wrap_exceptions_logger
 def predict_interests(user_id):
+    user_id = int(user_id)
     jokes = get_unrated_jokes(user_id)
     user_joke_ids = list(zip(repeat(user_id), jokes))
     predictions = zip(recommender.predict_multi(user_joke_ids), jokes)
