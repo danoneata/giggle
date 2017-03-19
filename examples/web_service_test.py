@@ -21,9 +21,16 @@ def predict_interests(args):
     print(json.dumps(json.loads(response.text), indent=4))
 
 
+def similar_items(args):
+    URL = 'http://localhost:6667/similarItems/{:d}'
+    response = requests.get(URL.format(args.joke))
+    print(json.dumps(json.loads(response.text), indent=4))
+
+
 TODO = {
     'add': add_data,
     'predict': predict_interests,
+    'sims': similar_items,
 }
 
 
@@ -64,6 +71,17 @@ def main():
         type=int,
         required=True,
         help='user ID',
+    )
+
+    parser_3 = subparsers.add_parser(
+        'sims',
+        help='Finds similar jokes to given one',
+    )
+    parser_3.add_argument(
+        '-j', '--joke',
+        type=int,
+        required=True,
+        help='joke ID',
     )
 
     args = parser.parse_args()

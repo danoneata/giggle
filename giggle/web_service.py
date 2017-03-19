@@ -19,6 +19,8 @@ from logging import config as cfg
 
 from json import dumps
 
+import numpy as np  # type: ignore
+
 from typing import (
     Dict,
     List,
@@ -50,7 +52,8 @@ logger = logging.getLogger('web-service')
 wrap_exceptions_logger = partial(wrap_exceptions, logger=logger)
 
 
-recommender = load_recommender(get_recommender_path(os.getenv('RECOMMENDER')))
+recommender_key = os.getenv('RECOMMENDER')
+recommender = load_recommender(get_recommender_path(recommender_key))
 
 
 def get_unrated_jokes(user_id: int) -> List[int]:
@@ -91,3 +94,30 @@ def add_data():
     db.session.commit()
 
     return jsonify(json_data), 201
+
+
+@app.route('/similarItems/<joke_id>')
+@wrap_exceptions_logger
+def similar_items(joke_id):
+
+    if not recommender_key.startswith('neigh'):
+        return jsonify("End-point works only with neighbourhood-based method"), 400
+
+    joke_to_iid = recommender.data.joke_to_iid
+    iid_to_joke = {i: j for j, i in joke_to_iid.items()}
+
+    joke_id = int(joke_id)
+    joke_iid = joke_to_iid[joke_id]
+
+    iids = np.argsort(-recommender.sims[joke_iid])
+
+    json_data = [
+        {
+            'id': int(iid_to_joke[iid]),
+            'similarity': float(recommender.sims[joke_iid, iid]),
+        }
+        for iid in iids
+        if iid != joke_iid
+    ]
+    json_data = json_data[:5]
+    return jsonify(json_data), 200

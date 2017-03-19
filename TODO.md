@@ -23,9 +23,9 @@ Keeping track of the things to do:
 - [x] Regenerate database with not-nullable constraint and float ratings
 - [x] Predict only unrated jokes
 - [x] Notebook: Write details on each algorithm
-- [?] Extra: Create a new entry point to retrieve jokes similar to a given joke
+- [x] Extra: Create a new entry point to retrieve jokes similar to a given joke
 - [?] Update recommender and dataset in the `addData` entrypoint
-- [ ] Implement a more advanced neighbouring method that uses baselines as well
+- [ ] Extra: Implement a more advanced neighbouring method that uses baselines as well
 - [ ] Extra: Implement more entry points: find similar jokes to a given joke
 - [ ] Extra: Implement and evaluate a matrix factorization method
 - [ ] Extra: Predict ratings from items' features
