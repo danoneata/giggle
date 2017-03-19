@@ -170,32 +170,56 @@ class Neighbourhood(Recommender):
     def __init__(self, k: int) -> None:
         self.k = k
 
-    def _find_most_similar_jokes(self, joke_id: int) -> List[int]:
+    def _compute_similarities(self, user_joke_matrix: np.array) -> np.array:
+        MIN_SUPPORT = 5
+        _, nr_jokes = user_joke_matrix.shape
+        joke_joke_matrix = np.zeros((nr_jokes, nr_jokes))
+        np.fill_diagonal(joke_joke_matrix, 1)
+        for i in range(nr_jokes):
+            for j in range(i + 1, nr_jokes):
+                common = np.logical_and(
+                    np.logical_not(np.isnan(user_joke_matrix[:, i])),
+                    np.logical_not(np.isnan(user_joke_matrix[:, j])),
+                )
+                if np.sum(common) < MIN_SUPPORT:
+                    continue
+                r_i = user_joke_matrix[common, i] - user_joke_matrix[common, i].mean()
+                r_j = user_joke_matrix[common, j] - user_joke_matrix[common, j].mean()
+                numer = np.sum(r_i * r_j)
+                denom = np.sqrt(np.sum(r_i ** 2)) * np.sqrt(np.sum(r_j ** 2))
+                joke_joke_matrix[i, j] = joke_joke_matrix[j, i] = numer / denom
+        return joke_joke_matrix
+
+    def _find_most_similar_rated_jokes(self, user_ratings: np.array, joke_id: int) -> List[int]:
         i = self.data.joke_to_iid[joke_id]
+        rated_iids, = np.where(np.logical_not(np.isnan(user_ratings)))
         joke_iids = np.argsort(-self.sims[i])
-        joke_iids = joke_iids[1: self.k + 1]
+        joke_iids = [iid for iid in joke_iids if iid != i and iid in rated_iids]
+        joke_iids = joke_iids[:self.k]
         return joke_iids
 
     def fit(self, data: Data, verbose: int) -> Recommender:
         self.user_joke_matrix = data_to_user_joke_matrix(data)
-        self.sims = np.corrcoef(self.user_joke_matrix.T)
+        self.sims = self._compute_similarities(self.user_joke_matrix)
         self.data = data
+        self.mu = data.data_frame.rating.mean()
         return self
 
     def predict(self, user_id: int, joke_id: int) -> float:
         user_iid = self.data.user_to_iid[user_id]
         joke_iid = self.data.joke_to_iid[joke_id]
-        jokes = self._find_most_similar_jokes(joke_id)
-        sum_rat = sum(self.sims[j, joke_iid] * self.user_joke_matrix[user_iid, j] for j in jokes)
-        sum_sim = sum(self.sims[j, joke_iid] for j in jokes)
-        return sum_rat / sum_sim
+        user_ratings = self.user_joke_matrix[user_iid]
+        jokes = self._find_most_similar_rated_jokes(user_ratings, joke_id)
+        sum_rat = np.sum(self.sims[joke_iid, jokes] * user_ratings[jokes])
+        sum_sim = np.sum(self.sims[joke_iid, jokes])
+        return (sum_rat / sum_sim) if sum_sim != 0 else self.mu
 
 
 RECOMMENDERS = {
     'gaussian': GaussianRecommender(),
     'beta': BetaRecommender(),
     'baseline': BaselineRecommender(nr_epochs=10, lr=0.01, reg=0.1),
-    'neigh': Neighbourhood(k=10),
+    'neigh': Neighbourhood(k=35),
     # 'neigh_mean': Neighbourhood(),
     # 'neigh_base': Neighbourhood(),
 }
