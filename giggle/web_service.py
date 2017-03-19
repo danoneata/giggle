@@ -20,8 +20,9 @@ from logging import config as cfg
 from json import dumps
 
 from typing import (
-    Tuple,
     Dict,
+    List,
+    Tuple,
 )
 
 from .config import Config
@@ -52,10 +53,16 @@ wrap_exceptions_logger = partial(wrap_exceptions, logger=logger)
 recommender = load_recommender(get_recommender_path(os.getenv('RECOMMENDER')))
 
 
+def get_unrated_jokes(user_id: int) -> List[int]:
+    jokes = set(joke_id for joke_id, in Rating.query.with_entities(Rating.joke_id).distinct(Rating.joke_id))
+    jokes_rated = set(joke_id for joke_id, in Rating.query.with_entities(Rating.joke_id).filter_by(user_id=user_id))
+    return list(jokes - jokes_rated)
+
+
 @app.route('/predictInterests/<user_id>')
 @wrap_exceptions_logger
 def predict_interests(user_id):
-    jokes = range(1, 141)
+    jokes = get_unrated_jokes(user_id)
     user_joke_ids = list(zip(repeat(user_id), jokes))
     predictions = zip(recommender.predict_multi(user_joke_ids), jokes)
     predictions = sorted(predictions, reverse=True)
