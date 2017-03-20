@@ -18,6 +18,7 @@ from .data import (
 from .evaluate import (
     evaluate_folds,
     print_results,
+    scatter_plot,
 )
 
 from .recommender import (
@@ -39,8 +40,9 @@ def evaluate(args):
     # Evaluates recommender system
     dataset = DATASETS[args.dataset]()
     recommender = RECOMMENDERS[args.recommender]
-    results = evaluate_folds(dataset, recommender, args.verbose)
+    results, data = evaluate_folds(dataset, recommender, args.verbose)
     print_results(results)
+    scatter_plot(data, path='data/plots/{}_{}.png'.format(args.recommender, args.dataset))
 
 
 def web(args):
